@@ -89,20 +89,22 @@ function stopRecording() {
 }
 
 function download() {
+  const { jsPDF } = window.jspdf;
   const text = result.innerText;
-  const filename = "speech.txt";
+  const filename = "Speech_Transcription.pdf";
 
-  const element = document.createElement("a");
-  element.setAttribute(
-    "href",
-    "data:text/plain;charset=utf-8," + encodeURIComponent(text)
-  );
-  element.setAttribute("download", filename);
-  element.style.display = "none";
-  document.body.appendChild(element);
-  element.click();
-  document.body.removeChild(element);
+  const pdf = new jsPDF();
+  pdf.setFont("helvetica", "bold");
+  pdf.setFontSize(16);
+  pdf.text("Speech-to-Text Transcription", 10, 10);
+
+  pdf.setFont("helvetica", "normal");
+  pdf.setFontSize(12);
+  pdf.text(text, 10, 20, { maxWidth: 180 });
+
+  pdf.save(filename);
 }
+
 
 downloadBtn.addEventListener("click", download);
 
